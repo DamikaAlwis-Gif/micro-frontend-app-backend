@@ -59,6 +59,12 @@ namespace FaqService.Dal
             _dbContext.SaveChanges();
         }
 
+        public void DeleteUser(User user)
+        {
+            _dbContext.Users.Remove(user);
+            _dbContext.SaveChanges();
+        }
+
         public IEnumerable<Question> GetAllQuestions()
         {
             var questions = _dbContext.Questions.ToList();
@@ -165,6 +171,16 @@ namespace FaqService.Dal
                             .FirstOrDefault();
         }
 
+        public void UpdateUser(User user)
+        {
+            var userFromDb = _dbContext.Users
+                            .Where(u => u.Id == user.Id)
+                            .FirstOrDefault();
+
+            userFromDb.UserName = user.UserName;
+
+            _dbContext.SaveChanges();
+        }
 
         public void UpdateVotes(Vote vote)
         {

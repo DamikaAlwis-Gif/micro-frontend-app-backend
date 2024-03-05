@@ -50,16 +50,64 @@ namespace FaqService.Service.EventProcessing
             }
         }
 
-        //TODO
-        private void UpdateUser(string message)
+
+        private void UpdateUser(string userPublishedMessage)
         {
-            throw new NotImplementedException();
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var repo = scope.ServiceProvider.GetRequiredService<IFaqRepo>();
+
+                var userPublishedDto = JsonSerializer.Deserialize<UserPublishedDto>(userPublishedMessage);
+
+                try
+                {
+                    var user = _mapper.Map<User>(userPublishedDto);
+                    if (repo.UserExists(user.Id))
+                    {
+                        repo.UpdateUser(user);
+                        repo.SaveChanges();
+                        Console.WriteLine("---> User Updated!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("---> User not exists!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"---> Could not update User: {ex.Message}");
+                }
+            }
         }
 
-        //TODO
-        private void DeleteUser(string message)
+
+        private void DeleteUser(string userPublishedMessage)
         {
-            throw new NotImplementedException();
+            using (var scope = _serviceScopeFactory.CreateScope())
+            {
+                var repo = scope.ServiceProvider.GetRequiredService<IFaqRepo>();
+
+                var userPublishedDto = JsonSerializer.Deserialize<UserPublishedDto>(userPublishedMessage);
+
+                try
+                {
+                    var user = _mapper.Map<User>(userPublishedDto);
+                    if (repo.UserExists(user.Id))
+                    {
+                        repo.DeleteUser(user);
+                        repo.SaveChanges();
+                        Console.WriteLine("---> User Deleted!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("---> User not exists!");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"---> Could not delete User: {ex.Message}");
+                }
+            }
         }
 
         private void AddUser(string userPublishedMessage)

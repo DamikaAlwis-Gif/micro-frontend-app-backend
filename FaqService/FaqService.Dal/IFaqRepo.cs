@@ -35,5 +35,7 @@ namespace FaqService.Dal
         string GetUserChoice(int answerId, Guid userId);
         Guid GetQuestionOwnerId(int questionId);
         Guid GetAnswerOwnerId(int answerId);
+        void UpdateUser(User user);
+        void DeleteUser(User user);
     }
 }
